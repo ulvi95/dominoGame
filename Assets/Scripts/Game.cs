@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using static System.Net.Mime.MediaTypeNames;
+using UnityEngine.UI;
 
 public class Game : MonoBehaviour
 {
@@ -63,7 +63,7 @@ public class Game : MonoBehaviour
         bottomCenter = Camera.main.ViewportToWorldPoint(new Vector2(-37, -75));
         topCenter = Camera.main.ViewportToWorldPoint(new Vector2(-37, 75));
         centerLeft = Camera.main.ViewportToWorldPoint(new Vector2(-75, -19));
-        centerRight = Camera.main.ViewportToWorldPoint(new Vector2(88, -19));
+        centerRight = Camera.main.ViewportToWorldPoint(new Vector2(75, -19));
 
         NumberOfPlayersPassed = PlayerPrefs.GetInt("numberOfPlayers", 2);
         IsDoublerPassed = PlayerPrefs.GetInt("doubleToggleValue", 0) == 1;
@@ -130,34 +130,40 @@ public class Game : MonoBehaviour
 
             for (int j = 0; j < 5; j++)
             {
-                DominoObject dominoObjectScript = player.PlayerDominoes[j];
+				DominoObject dominoObjectScript = player.PlayerDominoes[j];
 
-                dominoObjectScript.gameObject.transform.SetParent(highestPriorityCanvas.transform);
-                dominoObjectScript.gameObject.AddComponent<RectTransform>();
+				dominoObjectScript.gameObject.transform.SetParent(highestPriorityCanvas.transform);
+				dominoObjectScript.gameObject.AddComponent<RectTransform>();
 
-                if (i == 0)
-                {
-                    Sprite sprite = Sprite.Create(dominoObjectScript.Texture, new Rect(0, 0, dominoObjectScript.Texture.width, dominoObjectScript.Texture.height), Vector2.zero);
+				if (i == 0)
+				{
+					Sprite sprite = Sprite.Create(dominoObjectScript.Texture, new Rect(0, 0, dominoObjectScript.Texture.width, dominoObjectScript.Texture.height), Vector2.zero);
 
-                    SpriteRenderer renderer = dominoObjectScript.gameObject.AddComponent<SpriteRenderer>();
-                    renderer.sprite = sprite;
-                    renderer.sortingOrder = 1;
-                    dominoObjectScript.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(204, 304);
-                    dominoObjectScript.gameObject.GetComponent<RectTransform>().anchoredPosition = bottomCenter;
-                    dominoObjectScript.gameObject.GetComponent<RectTransform>().localScale = new Vector2(40, 40);
+					Image image = dominoObjectScript.gameObject.AddComponent<Image>();
+					image.sprite = sprite;
+					image.raycastTarget = true;
+					image.rectTransform.sizeDelta = new Vector2(77, 114);
+					image.rectTransform.anchoredPosition = bottomCenter;
+					image.rectTransform.localScale = new Vector2(1, 1);
 
-                    bottomCenter.x += spacing;
-                }
+					Button button = dominoObjectScript.gameObject.AddComponent<Button>();
+					button.onClick.AddListener(() => Debug.Log(dominoObjectScript.Domino.ToString())); //Work on the actions
+
+					bottomCenter.x += spacing;
+				}
                 else
                 {
                     Sprite sprite = Sprite.Create(dominoObjectScript.HiddenTexture, new Rect(0, 0, dominoObjectScript.Texture.width, dominoObjectScript.Texture.height), Vector2.zero);
 
-                    SpriteRenderer renderer = dominoObjectScript.gameObject.AddComponent<SpriteRenderer>();
-                    renderer.sprite = sprite;
-                    renderer.sortingOrder = 1;
+					Image image = dominoObjectScript.gameObject.AddComponent<Image>();
+					image.sprite = sprite;
+					image.raycastTarget = true;
+					image.rectTransform.sizeDelta = new Vector2(77, 114);
+					image.rectTransform.anchoredPosition = bottomCenter;
+					image.rectTransform.localScale = new Vector2(1, 1);
 
-                    dominoObjectScript.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(204, 304);
-                    dominoObjectScript.gameObject.GetComponent<RectTransform>().localScale = new Vector2(40, 40);
+                    dominoObjectScript.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(77, 114);
+                    dominoObjectScript.gameObject.GetComponent<RectTransform>().localScale = new Vector2(1, 1);
                     if (i == 1)
                     {
                         dominoObjectScript.gameObject.GetComponent<RectTransform>().anchoredPosition = topCenter;
